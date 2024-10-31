@@ -1,0 +1,22 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 24,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "macos-gcc",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" },
+      "displayName": "macOS GCC",
+      "description": "Default build options for macOS GCC",
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "g++-13",
+        "CMAKE_CXX_FLAGS": "-ld_classic",
+        "CMAKE_C_COMPILER": "gcc-13",
+        "CMAKE_C_FLAGS": "-ld_classic"
+      }
+    }
+  ]
+}
