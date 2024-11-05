@@ -7,6 +7,7 @@
 #include "CodeAnalysis.hpp"
 #include "FilenameToLanguage.hpp"
 #include "XMLWrapper.hpp"
+#include <string_view>
 
 /**
  * Generate source analysis XML based on the request
@@ -17,11 +18,16 @@
  * @retval Empty string if invalid
  */
 std::string formatAnalysisXML(const AnalysisRequest& request) {
-
-    // wrap the content with a unit element
     XMLWrapper unit("code", "http://mlcollard.net/code");
     unit.startElement("unit");
+
     unit.addAttribute("language", request.optionLanguage);
+
+    // Check if diskFilename is set and use it as filename attribute for non-archive files
+    if (!request.diskFilename.empty()) {
+        unit.addAttribute("filename", request.diskFilename);
+    }
+
     unit.addContent(request.sourceCode);
     unit.endElement();
 
