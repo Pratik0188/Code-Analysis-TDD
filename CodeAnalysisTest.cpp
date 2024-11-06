@@ -1,10 +1,8 @@
 /*
  @file CodeAnalysisTest.cpp
 
-
  Test program for analysis requests
 */
-
 
 #include "CodeAnalysis.hpp"
 
@@ -13,7 +11,6 @@
 #include <iostream>
 
 int main() {
-
 
    // option language
     {
@@ -31,7 +28,6 @@ if (a < b) a = b;
         request.optionHash      = "";
         request.optionLOC       = -1;
         request.timestamp       = "";
-
 
         assert(formatAnalysisXML(request) ==
             R"(<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -70,7 +66,7 @@ if (a &lt; b) a = b;
     {
         AnalysisRequest request;
         request.sourceCode = R"(
-int main() { return 0; }
+if (a < b) a = b;
 )";
         request.diskFilename    = "archive.zip";
         request.entryFilename   = "main.cpp"; // Entry filename within the archive
@@ -86,7 +82,57 @@ int main() { return 0; }
         assert(formatAnalysisXML(request) ==
             R"(<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <code:unit xmlns:code="http://mlcollard.net/code" language="C++" filename="main.cpp">
-int main() { return 0; }
+if (a &lt; b) a = b;
+</code:unit>
+)");
+    }
+
+    // Test case: include timestamp if it's non-empty
+    {
+        AnalysisRequest request;
+        request.sourceCode = R"(
+if (a < b) a = b;
+)";
+        request.diskFilename    = "main.cpp";
+        request.entryFilename   = "";
+        request.optionFilename  = "";
+        request.sourceURL       = "";
+        request.optionURL       = "";
+        request.optionLanguage  = "C++";
+        request.defaultLanguage = "";
+        request.optionHash      = "";
+        request.optionLOC       = -1;
+        request.timestamp       = "2024-11-05T12:34:56"; // Non-empty timestamp
+
+        assert(formatAnalysisXML(request) ==
+            R"(<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<code:unit xmlns:code="http://mlcollard.net/code" language="C++" filename="main.cpp" timestamp="2024-11-05T12:34:56">
+if (a &lt; b) a = b;
+</code:unit>
+)");
+    }
+    
+        // Test case: include loc attribute if optionLOC is non-negative
+    {
+        AnalysisRequest request;
+        request.sourceCode = R"(
+if (a < b) a = b;
+)";
+        request.diskFilename    = "main.cpp";
+        request.entryFilename   = "";
+        request.optionFilename  = "";
+        request.sourceURL       = "";
+        request.optionURL       = "";
+        request.optionLanguage  = "C++";
+        request.defaultLanguage = "";
+        request.optionHash      = "";
+        request.optionLOC       = 10; // Non-negative LOC
+        request.timestamp       = "";
+
+        assert(formatAnalysisXML(request) ==
+            R"(<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<code:unit xmlns:code="http://mlcollard.net/code" language="C++" filename="main.cpp">
+if (a &lt; b) a = b;
 </code:unit>
 )");
     }
