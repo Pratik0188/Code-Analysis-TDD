@@ -1,7 +1,7 @@
 /*
-  @file CodeAnalysis.cpp
+@file CodeAnalysis.cpp
 
-  Implementation of analysis requests
+Implementation of analysis requests
 */
 
 #include "CodeAnalysis.hpp"
@@ -23,9 +23,11 @@ std::string formatAnalysisXML(const AnalysisRequest& request) {
 
     unit.addAttribute("language", request.optionLanguage);
 
-    // Check if diskFilename is set and use it as filename attribute for non-archive files
-    if (!request.diskFilename.empty()) {
-        unit.addAttribute("filename", request.diskFilename);
+    // Determine the filename based on whether the request is an archive or not
+    std::string_view filename = !request.entryFilename.empty() ? request.entryFilename : request.diskFilename;
+    // Add filename attribute if it's not empty
+    if (!filename.empty()) {
+        unit.addAttribute("filename", filename);
     }
 
     unit.addContent(request.sourceCode);
