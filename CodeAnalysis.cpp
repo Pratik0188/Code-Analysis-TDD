@@ -30,6 +30,11 @@ std::string formatAnalysisXML(const AnalysisRequest& request) {
         unit.addAttribute("filename", filename);
     }
 
+    // Use timestamp as an attribute if it's not empty
+    if (!request.timestamp.empty()) {
+        unit.addAttribute("timestamp", request.timestamp);
+    }
+
     unit.addContent(request.sourceCode);
     unit.endElement();
 
