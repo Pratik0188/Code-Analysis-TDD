@@ -41,6 +41,16 @@ std::string formatAnalysisXML(const AnalysisRequest& request) {
         unit.addAttribute("timestamp", request.timestamp);
     }
 
+    // Add loc attribute if optionLOC is non-negative
+    if (request.optionLOC >= 0) {
+        unit.addAttribute("loc", std::to_string(request.optionLOC));
+    }
+
+    // Add url attribute if sourceURL is non-empty
+    if (!request.sourceURL.empty()) {
+        unit.addAttribute("url", request.sourceURL);
+    }
+
     unit.addContent(request.sourceCode);
     unit.endElement();
 
