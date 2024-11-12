@@ -159,5 +159,30 @@ if (a &lt; b) a = b;
 )");
     }
 
+    // Test case: use optionHash for the hash attribute if it's non-empty
+    {
+        AnalysisRequest request;
+        request.sourceCode = R"(
+if (a < b) a = b;
+)";
+        request.diskFilename    = "main.cpp";
+        request.entryFilename   = "";
+        request.optionFilename  = "";
+        request.sourceURL       = "";
+        request.optionURL       = "";
+        request.optionLanguage  = "C++";
+        request.defaultLanguage = "";
+        request.optionHash      = "abc123"; // Non-empty hash
+        request.optionLOC       = -1;
+        request.timestamp       = "";
+
+        assert(formatAnalysisXML(request) ==
+            R"(<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<code:unit xmlns:code="http://mlcollard.net/code" language="C++" filename="main.cpp" hash="abc123">
+if (a &lt; b) a = b;
+</code:unit>
+)");
+}
+
     return 0;
 }

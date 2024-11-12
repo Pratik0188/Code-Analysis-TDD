@@ -22,10 +22,12 @@ std::string formatAnalysisXML(const AnalysisRequest& request) {
     unit.startElement("unit");
     unit.addAttribute("language", request.optionLanguage);
 
-    // Initialize filename based on request values
-    std::string_view filename = request.diskFilename;
+    // Determine the filename based on whether the request is an archive or not
+    std::string_view filename;
     if (!request.entryFilename.empty()) {
         filename = request.entryFilename;
+    } else {
+        filename = request.diskFilename;
     }
 
     // Add filename attribute if it's not empty
@@ -46,6 +48,12 @@ std::string formatAnalysisXML(const AnalysisRequest& request) {
     if (!request.sourceURL.empty()) {
         unit.addAttribute("url", request.sourceURL);
     }
+
+    // Add hash attribute if optionHash is non-empty
+    if (!request.optionHash.empty()) {
+        unit.addAttribute("hash", request.optionHash);
+    }
+
     unit.addContent(request.sourceCode);
     unit.endElement();
 
