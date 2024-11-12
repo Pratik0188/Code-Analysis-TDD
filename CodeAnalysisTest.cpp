@@ -209,5 +209,30 @@ if (a &lt; b) a = b;
 )");
 }
 
+    // Test case: Ensure language is correctly assigned when optionLanguage is specified
+    {
+        AnalysisRequest request;
+        request.sourceCode = R"(
+if (a < b) a = b;
+)";
+        request.diskFilename    = "sample.cpp";  // Disk filename with .cpp extension
+        request.entryFilename   = "";
+        request.optionFilename  = "";
+        request.sourceURL       = "";
+        request.optionURL       = "";
+        request.optionLanguage  = "Python";  // Set language explicitly
+        request.defaultLanguage = "";
+        request.optionHash      = "";
+        request.optionLOC       = -1;
+        request.timestamp       = "";
+
+        assert(formatAnalysisXML(request) ==
+            R"(<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<code:unit xmlns:code="http://mlcollard.net/code" language="Python" filename="sample.cpp">
+if (a &lt; b) a = b;
+</code:unit>
+)");
+}
+
     return 0;
 }

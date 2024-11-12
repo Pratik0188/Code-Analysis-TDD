@@ -33,6 +33,26 @@ std::string formatAnalysisXML(const AnalysisRequest& request) {
     // Wrap the content with a unit element
     XMLWrapper unit("code", "http://mlcollard.net/code");
     unit.startElement("unit");
+
+    // Initialize language, choosing from optionLanguage or filename
+    std::string language;
+    if (!request.optionLanguage.empty()) {
+        language = request.optionLanguage;
+    } 
+    if (language.empty()) {
+        language = filenameToLanguage(request.diskFilename);
+    }
+
+    // Error handling
+    if (language.empty()) {
+        if (request.diskFilename.empty()) {  // Standard input case
+            std::cerr << "Using stdin requires a declared language" << std::endl;
+        } else {  // Extension-based language determination
+            std::cerr << "Extension not supported" << std::endl;
+        }
+        return "";  
+    }
+
     unit.addAttribute("language", request.optionLanguage);
 
     // Determine the filename based on whether the request is an archive or not
