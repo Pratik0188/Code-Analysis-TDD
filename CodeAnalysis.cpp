@@ -23,12 +23,17 @@ std::string formatAnalysisXML(const AnalysisRequest& request) {
     unit.addAttribute("language", request.optionLanguage);
 
     // Determine the filename based on whether the request is an archive or not
-    std::string_view filename;
-    if (!request.entryFilename.empty()) {
+    std::string_view filename = request.diskFilename;
+
+    if (request.diskFilename == "-") {
+        // Use entryFilename if the diskFilename is "-"
         filename = request.entryFilename;
-    } else {
-        filename = request.diskFilename;
     }
+
+    if (!request.entryFilename.empty() && request.diskFilename != "-") {
+        // Use entryFilename if it's not empty and diskFilename isn't "-"
+        filename = request.entryFilename;
+    }    
 
     // Add filename attribute if it's not empty
     if (!filename.empty()) {
