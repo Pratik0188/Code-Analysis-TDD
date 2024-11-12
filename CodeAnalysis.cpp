@@ -7,6 +7,7 @@ Implementation of analysis requests
 #include "FilenameToLanguage.hpp"
 #include "XMLWrapper.hpp"
 #include <iostream>
+
 /**
  * Generate source analysis XML based on the request
  * Content is wrapped with an XML element that includes the metadata
@@ -29,7 +30,7 @@ std::string formatAnalysisXML(const AnalysisRequest& request) {
         return "";
     }
 
-    // wrap the content with a unit element
+    // Wrap the content with a unit element
     XMLWrapper unit("code", "http://mlcollard.net/code");
     unit.startElement("unit");
     unit.addAttribute("language", request.optionLanguage);
@@ -44,7 +45,7 @@ std::string formatAnalysisXML(const AnalysisRequest& request) {
     if (!request.entryFilename.empty() && request.diskFilename != "-") {
         // Use entryFilename if it's not empty and diskFilename isn't "-"
         filename = request.entryFilename;
-    }    
+    }
 
     // Add filename attribute if it's not empty
     if (!filename.empty()) {
