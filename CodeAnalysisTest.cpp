@@ -1,6 +1,5 @@
 /*
  @file CodeAnalysisTest.cpp
-
  Test program for analysis requests
 */
 
@@ -107,6 +106,54 @@ if (a < b) a = b;
         assert(formatAnalysisXML(request) ==
             R"(<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <code:unit xmlns:code="http://mlcollard.net/code" language="C++" filename="main.cpp" timestamp="2024-11-05T12:34:56">
+if (a &lt; b) a = b;
+</code:unit>
+)");
+    }
+
+    // Test case: include loc attribute if optionLOC is non-negative
+    {
+        AnalysisRequest request;
+        request.sourceCode = R"(
+if (a < b) a = b;
+)";
+        request.diskFilename    = "main.cpp";
+        request.entryFilename   = "";
+        request.optionFilename  = "";
+        request.sourceURL       = "";
+        request.optionURL       = "";
+        request.optionLanguage  = "C++";
+        request.defaultLanguage = "";
+        request.optionHash      = "";
+        request.optionLOC       = 10; // Non-negative LOC
+        request.timestamp       = "";
+
+        assert(formatAnalysisXML(request) ==
+            R"(<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<code:unit xmlns:code="http://mlcollard.net/code" language="C++" filename="main.cpp" loc="10">
+if (a &lt; b) a = b;
+</code:unit>
+)");
+    }
+    // Test case: include url attribute if sourceURL is non-empty
+    {
+        AnalysisRequest request;
+        request.sourceCode = R"(
+if (a < b) a = b;
+)";
+        request.diskFilename    = "main.cpp";
+        request.entryFilename   = "";
+        request.optionFilename  = "";
+        request.sourceURL       = "http://example.com/source"; // Non-empty URL
+        request.optionURL       = "";
+        request.optionLanguage  = "C++";
+        request.defaultLanguage = "";
+        request.optionHash      = "";
+        request.optionLOC       = -1;
+        request.timestamp       = "";
+        assert(formatAnalysisXML(request) ==
+            R"(<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<code:unit xmlns:code="http://mlcollard.net/code" language="C++" filename="main.cpp" url="http://example.com/source">
 if (a &lt; b) a = b;
 </code:unit>
 )");
