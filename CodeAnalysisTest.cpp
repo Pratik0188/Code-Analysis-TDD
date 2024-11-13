@@ -234,5 +234,29 @@ if (a &lt; b) a = b;
 )");
 }
 
+    // test case: The option filename has priority over any other way of determining the attribute filename
+    {
+        AnalysisRequest request;
+        request.sourceCode = R"(
+if (a < b) a = b;
+)";
+        request.diskFilename    = "main.cpp";
+        request.entryFilename   = "entry.cpp";
+        request.optionFilename  = "option.cpp";  // Explicit option filename
+        request.sourceURL       = "";
+        request.optionLanguage  = "C++";
+        request.defaultLanguage = "";
+        request.optionHash      = "";
+        request.optionLOC       = -1;
+        request.timestamp       = "";
+
+        assert(formatAnalysisXML(request) ==
+            R"(<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<code:unit xmlns:code="http://mlcollard.net/code" language="C++" filename="option.cpp">
+if (a &lt; b) a = b;
+</code:unit>
+)");
+}
+
     return 0;
 }
