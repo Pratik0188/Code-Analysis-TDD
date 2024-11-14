@@ -257,6 +257,30 @@ if (a &lt; b) a = b;
 </code:unit>
 )");
 }
+    // Test case: optionURL has priority over sourceURL for url attribute
+{
+        AnalysisRequest request;
+        request.sourceCode = R"(
+if (a < b) a = b;
+)";
+        request.diskFilename    = "main.cpp";
+        request.entryFilename   = "";
+        request.optionFilename  = "";
+        request.sourceURL       = "http://example.com/source";    // Original source URL
+        request.optionURL       = "http://override.com/source";   // Override URL
+        request.optionLanguage  = "C++";
+        request.defaultLanguage = "";
+        request.optionHash      = "";
+        request.optionLOC       = -1;
+        request.timestamp       = "";
+
+        assert(formatAnalysisXML(request) ==
+            R"(<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<code:unit xmlns:code="http://mlcollard.net/code" language="C++" filename="main.cpp" url="http://override.com/source">
+if (a &lt; b) a = b;
+</code:unit>
+)");
+}
 
     return 0;
 }

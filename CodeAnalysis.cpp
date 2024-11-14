@@ -57,7 +57,7 @@ std::string formatAnalysisXML(const AnalysisRequest& request) {
 
     // Initialize filename with the disk filename by default
     std::string_view filename = request.diskFilename;
-    
+
     // Determine the filename based on the optionFilename priority
     if (!request.optionFilename.empty()) {
     filename = request.optionFilename;
@@ -87,10 +87,14 @@ std::string formatAnalysisXML(const AnalysisRequest& request) {
         unit.addAttribute("loc", std::to_string(request.optionLOC));
     }
 
-    // Add url attribute if sourceURL is non-empty
-    if (!request.sourceURL.empty()) {
+    // Add url attribute, prioritizing optionURL over sourceURL
+    if (!request.optionURL.empty()) {
+    unit.addAttribute("url", request.optionURL);
+    }
+    if (request.optionURL.empty() && !request.sourceURL.empty()) {
         unit.addAttribute("url", request.sourceURL);
     }
+
 
     // Add hash attribute if optionHash is non-empty
     if (!request.optionHash.empty()) {
