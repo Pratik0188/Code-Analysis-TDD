@@ -18,89 +18,67 @@ Implementation of analysis requests
  */
 std::string formatAnalysisXML(const AnalysisRequest& request) {
 
-    // Handle case where language cannot be determined (extension not supported)
+    // Check for missing language or unsupported extension
     if (request.optionLanguage.empty() && request.diskFilename != "-") {
         std::cerr << "Extension not supported" << std::endl;
         return "";
     }
-
-    // Handle case where stdin is used but no declared language
     if (request.diskFilename == "-" && request.optionLanguage.empty()) {
         std::cerr << "Using stdin requires a declared language" << std::endl;
         return "";
     }
 
-    // Wrap the content with a unit element
-    XMLWrapper unit("code", "http://mlcollard.net/code");
-    unit.startElement("unit");
-
-    // Initialize language, choosing from optionLanguage or filename
-    std::string language;
+    // Initialize language and determine its value with if-then logic
+    std::string_view language;
     if (!request.optionLanguage.empty()) {
         language = request.optionLanguage;
-    } 
+    }
     if (language.empty()) {
         language = filenameToLanguage(request.diskFilename);
     }
-
-    // Error handling
     if (language.empty()) {
-        if (request.diskFilename.empty()) {  // Standard input case
-            std::cerr << "Using stdin requires a declared language" << std::endl;
-        } else {  // Extension-based language determination
-            std::cerr << "Extension not supported" << std::endl;
-        }
-        return "";  
+        std::cerr << (request.diskFilename.empty() ? "Using stdin requires a declared language" : "Extension not supported") << std::endl;
+        return "";
     }
 
-    unit.addAttribute("language", request.optionLanguage);
-
-    // Initialize filename with the disk filename by default
+    // Initialize filename and determine its value with if-then logic
     std::string_view filename = request.diskFilename;
-
-    // Determine the filename based on the optionFilename priority
     if (!request.optionFilename.empty()) {
-    filename = request.optionFilename;
+        filename = request.optionFilename;
     }
-
     if (filename == "-" && !request.entryFilename.empty()) {
-        // If diskFilename is "-" (stdin), use entryFilename as filename attribute
         filename = request.entryFilename;
     }
     if (!request.entryFilename.empty() && filename == request.diskFilename) {
-        // Use entryFilename if it's not empty and diskFilename isn't "-"
         filename = request.entryFilename;
     }
 
-    // Add filename attribute if it's not empty
+    // Create XML wrapper and add the starting element
+    XMLWrapper unit("code", "http://mlcollard.net/code");
+    unit.startElement("unit");
+
+    // Output attributes
+    unit.addAttribute("language", language);
     if (!filename.empty()) {
         unit.addAttribute("filename", filename);
     }
-
-    // Use timestamp as an attribute if it's not empty
     if (!request.timestamp.empty()) {
         unit.addAttribute("timestamp", request.timestamp);
     }
-
-    // Add loc attribute if optionLOC is non-negative
     if (request.optionLOC >= 0) {
         unit.addAttribute("loc", std::to_string(request.optionLOC));
     }
-
-    // Add url attribute, prioritizing optionURL over sourceURL
     if (!request.optionURL.empty()) {
-    unit.addAttribute("url", request.optionURL);
+        unit.addAttribute("url", request.optionURL);
     }
-    if (request.optionURL.empty() && !request.sourceURL.empty()) {
+    if (!request.sourceURL.empty() && request.optionURL.empty()) {
         unit.addAttribute("url", request.sourceURL);
     }
-
-
-    // Add hash attribute if optionHash is non-empty
     if (!request.optionHash.empty()) {
         unit.addAttribute("hash", request.optionHash);
     }
 
+    // Add the source code content and end the element
     unit.addContent(request.sourceCode);
     unit.endElement();
 
