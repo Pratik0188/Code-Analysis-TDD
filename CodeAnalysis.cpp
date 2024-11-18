@@ -50,6 +50,10 @@ std::string formatAnalysisXML(const AnalysisRequest& request) {
     if (!request.optionFilename.empty()) {
         filename = request.optionFilename;
     }
+    // Special case for stdin input with diskFilename as "-" and entryFilename as "data"
+    if (request.diskFilename == "-" && request.entryFilename == "data" && !request.optionFilename.empty()) {
+        filename = request.optionFilename; // Use optionFilename in this case
+    }
     if (filename == "-" && !request.entryFilename.empty()) {
         filename = request.entryFilename;
     }

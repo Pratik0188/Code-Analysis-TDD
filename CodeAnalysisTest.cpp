@@ -281,6 +281,30 @@ if (a &lt; b) a = b;
 </code:unit>
 )");
 }
+    // Test case: Use optionFilename when diskFilename is "-" and entryFilename is "data"
+{
+        AnalysisRequest request;
+        request.sourceCode = R"(
+if (a < b) a = b;
+)";
+        request.diskFilename    = "-";              // Single dash for source code from stdin
+        request.entryFilename   = "data";           // Entry filename for stdin
+        request.optionFilename  = "input.cpp";      // Provided option filename
+        request.sourceURL       = "";
+        request.optionURL       = "";
+        request.optionLanguage  = "C++";
+        request.defaultLanguage = "";
+        request.optionHash      = "";
+        request.optionLOC       = -1;
+        request.timestamp       = "";
+
+        assert(formatAnalysisXML(request) ==
+            R"(<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<code:unit xmlns:code="http://mlcollard.net/code" language="C++" filename="input.cpp">
+if (a &lt; b) a = b;
+</code:unit>
+)");
+}
 
     return 0;
 }
