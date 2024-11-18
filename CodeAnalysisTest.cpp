@@ -306,5 +306,30 @@ if (a &lt; b) a = b;
 )");
 }
 
+    // Test case: non-archive source file uses diskFilename to determine language
+{
+        AnalysisRequest request;
+        request.sourceCode = R"(
+if (a < b) a = b;
+)";
+        request.diskFilename    = "main.cpp";  // .cpp extension should map to C++
+        request.entryFilename   = "";
+        request.optionFilename  = "";
+        request.sourceURL       = "";
+        request.optionURL       = "";
+        request.optionLanguage  = "";  // No explicit language provided
+        request.defaultLanguage = "";
+        request.optionHash      = "";
+            request.optionLOC       = -1;
+        request.timestamp       = "";
+
+        assert(formatAnalysisXML(request) ==
+            R"(<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<code:unit xmlns:code="http://mlcollard.net/code" language="C++" filename="main.cpp">
+if (a &lt; b) a = b;
+</code:unit>
+)");
+}
+
     return 0;
 }

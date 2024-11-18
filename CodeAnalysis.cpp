@@ -20,8 +20,14 @@ std::string formatAnalysisXML(const AnalysisRequest& request) {
 
     // Check for missing language or unsupported extension
     if (request.optionLanguage.empty() && request.diskFilename != "-") {
-        std::cerr << "Extension not supported" << std::endl;
-        return "";
+        // Attempt to get the language based on the diskFilename
+        std::string_view language = filenameToLanguage(request.diskFilename);
+        if (language.empty()) {
+            std::cerr << "Extension not supported" << std::endl;
+            return "";
+        }
+        // If no language is provided, use the detected language
+        language = filenameToLanguage(request.diskFilename);
     }
     if (request.diskFilename == "-" && request.optionLanguage.empty()) {
         std::cerr << "Using stdin requires a declared language" << std::endl;
