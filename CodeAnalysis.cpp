@@ -37,7 +37,11 @@ std::string formatAnalysisXML(const AnalysisRequest& request) {
         language = filenameToLanguage(request.diskFilename);
     }
     if (language.empty()) {
-        std::cerr << (request.diskFilename.empty() ? "Using stdin requires a declared language" : "Extension not supported") << std::endl;
+        if (request.diskFilename.empty()) {
+            std::cerr << "Using stdin requires a declared language" << std::endl;
+            return "";
+        }
+        std::cerr << "Extension not supported" << std::endl;
         return "";
     }
 
