@@ -106,16 +106,16 @@ The rules cover various attributes such as `language`, `filename`, `LOC`, `hash`
 
 The workflow for implementing one rule:
 ```
-Add a single new test case for a single specific rule in the test program CodeAnalysisTest.cpp
-Successfully compile and build
-Run the test program and verify that the test case fails
-Add the implementation only for the new test case in the file CodeAnalysis.cpp
-Successfully compile and build
-Run the test program and verify that all tests pass, including the new test case
-Refactor the test and the added code
-Successfully compile and build
-Run the test program and verify that all tests still pass, including the new test case
-Commit with the appropriate commit message
+1. Add a single new test case for a single specific rule in the test program CodeAnalysisTest.cpp
+2. Successfully compile and build
+3. Run the test program and verify that the test case fails
+4. Add the implementation only for the new test case in the file CodeAnalysis.cpp
+5. Successfully compile and build
+6. Run the test program and verify that all tests pass, including the new test case
+7. Refactor the test and the added code
+8. Successfully compile and build
+9. Run the test program and verify that all tests still pass, including the new test case
+10. Commit with the appropriate commit message
 ```
 ### Commit Message Guidelines
 
