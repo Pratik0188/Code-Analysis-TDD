@@ -104,12 +104,19 @@ The rules cover various attributes such as `language`, `filename`, `LOC`, `hash`
 
 ### TDD Workflow
 
-For each rule:
-1. **Write a test**: Add a test case to `CodeAnalysisTest.cpp`.
-2. **Implement the rule**: Write the minimal code to pass the test in `CodeAnalysis.cpp`.
-3. **Refactor**: Clean up the code for clarity and simplicity while ensuring all tests pass.
-4. **Commit**: Commit each change with a meaningful message.
-
+The workflow for implementing one rule:
+```
+Add a single new test case for a single specific rule in the test program CodeAnalysisTest.cpp
+Successfully compile and build
+Run the test program and verify that the test case fails
+Add the implementation only for the new test case in the file CodeAnalysis.cpp
+Successfully compile and build
+Run the test program and verify that all tests pass, including the new test case
+Refactor the test and the added code
+Successfully compile and build
+Run the test program and verify that all tests still pass, including the new test case
+Commit with the appropriate commit message
+```
 ### Commit Message Guidelines
 
 To maintain a consistent style and clarity in the project history, follow the guidelines below when committing changes.
