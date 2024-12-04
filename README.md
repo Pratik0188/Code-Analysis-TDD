@@ -16,6 +16,49 @@ The goal is to implement a series of rules for generating the XML metadata accor
 - **README.md**: This file, providing an overview of the project and the setup instructions.
 - **CMakeLists.txt**: CMake configuration for building the project.
 
+# Source Code Static Analysis Tool
+
+This project implements a static code analysis tool that processes input from various sources, including individual files, directories, source-code archives, and standard input (stdin). The tool generates XML metadata for the analyzed source code, which includes essential information such as filename, programming language, URL, hash, lines of code (LOC), and timestamp.
+
+## Input Sources
+
+The input for the code analysis tool can come from the following sources:
+
+1. **Individual files**: A single source code file (e.g., `main.cpp`).
+2. **Directories**: A directory containing multiple source code files (e.g., `src/`).
+3. **Source-code archives**: Compressed archives containing source code files (e.g., `project.tar.gz`, `file.zip`).
+4. **Standard input (stdin)**: Source code provided directly via standard input (e.g., using `std::cin`).
+
+Additionally, source code files and archives can include an associated **URL** that points to the source code location (e.g., `https://mlcollard.net/fragment.cpp`).
+
+## Output Format
+
+The output of the analysis is an XML element containing metadata about the source code. This metadata includes the following attributes:
+
+- **language**: The programming language of the source code.
+- **url**: The URL associated with the source code (if provided).
+- **filename**: The name of the source code file.
+- **timestamp**: The timestamp of when the analysis was performed.
+- **loc**: The number of lines of code (LOC).
+- **hash**: The SHA1 hash of the source code content.
+
+### Example XML Output
+
+For the following source code:
+
+```cpp
+if (a < b)
+    a = b;
+```
+the resulting XML is:
+
+```
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<code:unit xmlns:code="http://mlcollard.net/code" language="C++" url="http://mlcollard.net/fragment.cpp" filename="fragment.cpp" timestamp="Thu Oct 31 12:15:00 2024" loc="3" hash="39dcad4f59855aa76420aa3d69af3d7ba30a91bb">
+if (a &lt; b)
+    a = b;
+</code:unit>
+```
 ### Rules Implementation
 
 The project is structured around implementing specific rules, which are detailed below. Each rule must be implemented following the TDD process:
