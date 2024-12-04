@@ -2,7 +2,7 @@
 
 An instructional project to implement, using a TDD approach, a set of rules for metadata needed for (source) code analysis.
 
-## Project 3: Code Analysis Tool (TDD Approach)
+## Project : Code Analysis Tool (TDD Approach)
 
 ### Overview
 This project involves developing a static code analysis tool using the Test-Driven Development (TDD) approach. The tool takes input from various sources, such as source code files, archives, or standard input, and generates XML metadata about the source code. The metadata includes attributes such as filename, language, URL, hash, lines of code (LOC), and timestamp.
