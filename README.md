@@ -113,12 +113,12 @@ The workflow for implementing one rule:
 To maintain a consistent style and clarity in the project history, follow the guidelines below when committing changes.
 ```
 General Guidelines
-1. Start with a verb**: Use action verbs to describe what the commit does (e.g., `Add`, `Fix`, `Change`, `Refactor`).
-2. Capitalized subject line**: Always capitalize the first letter of the subject line.
-3. Keep the subject concise**: Limit the subject line to 50 characters or less.
-4. No period at the end of the subject line**: Do not add a period at the end of the subject line.
-5. Use imperative mood**: Write the message as if giving a command (e.g., `Fix bug` instead of `Fixed bug`).
-6. Use the body for additional context**: If necessary, use the body of the commit to explain **why** the change was made, not **what** was changed.
+1. Start with a verb: Use action verbs to describe what the commit does (e.g., `Add`, `Fix`, `Change`, `Refactor`).
+2. Capitalized subject line: Always capitalize the first letter of the subject line.
+3. Keep the subject concise: Limit the subject line to 50 characters or less.
+4. No period at the end of the subject line: Do not add a period at the end of the subject line.
+5. Use imperative mood: Write the message as if giving a command (e.g., `Fix bug` instead of `Fixed bug`).
+6. Use the body for additional context: If necessary, use the body of the commit to explain **why** the change was made, not **what** was changed.
 ```
 #### Example Commit Message Format
 ```bash
